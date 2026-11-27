@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+{% block title %}{{ title_text }}{% endblock %}
+{% block content %}
+<div class="row justify-content-center">
+  <div class="col-lg-8">
+    <div class="card shadow-sm">
+      <div class="card-body">
+        <h1 class="h4 mb-3">{{ title_text }}</h1>
+        <form method="post">
+          <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+          <div class="mb-3">
+            <label class="form-label" for="title">Заголовок</label>
+            <input class="form-control" id="title" name="title" maxlength="100" required
+                   value="{{ request.form.get('title', note['title'] if note else '') }}">
+          </div>
+          <div class="mb-3">
+            <label class="form-label" for="content">Текст</label>
+            <textarea class="form-control" id="content" name="content" rows="8" maxlength="5000">{{ request.form.get('content', note['content'] if note else '') }}</textarea>
+          </div>
+          <button class="btn btn-primary" type="submit">Сохранить</button>
+          <a class="btn btn-outline-secondary" href="{{ url_for('notes.index') }}">Отмена</a>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

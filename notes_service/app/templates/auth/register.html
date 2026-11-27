@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+{% block title %}Регистрация{% endblock %}
+{% block content %}
+<div class="row justify-content-center">
+  <div class="col-md-5">
+    <div class="card shadow-sm">
+      <div class="card-body">
+        <h1 class="h4 mb-3">Регистрация</h1>
+        <form method="post">
+          <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+          <div class="mb-3">
+            <label class="form-label" for="username">Логин</label>
+            <input class="form-control" id="username" name="username" required pattern="[A-Za-z0-9_]{3,30}"
+                   value="{{ request.form.get('username', '') }}">
+            <div class="form-text">3–30 символов: латинские буквы, цифры, _</div>
+          </div>
+          <div class="mb-3">
+            <label class="form-label" for="password">Пароль</label>
+            <input class="form-control" id="password" name="password" type="password" required minlength="6">
+            <div class="form-text">Не короче 6 символов</div>
+          </div>
+          <div class="mb-3">
+            <label class="form-label" for="password2">Повторите пароль</label>
+            <input class="form-control" id="password2" name="password2" type="password" required minlength="6">
+          </div>
+          <button class="btn btn-primary w-100" type="submit">Зарегистрироваться</button>
+        </form>
+        <p class="mt-3 mb-0 text-center">Уже есть аккаунт? <a href="{{ url_for('auth.login') }}">Войти</a></p>
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

@@ -1,0 +1,45 @@
+{% extends "base.html" %}
+{% block title %}Мои заметки{% endblock %}
+{% block content %}
+<div class="d-flex flex-wrap justify-content-between align-items-center gap-2 mb-3">
+  <h1 class="h3 m-0">Мои заметки</h1>
+  <a class="btn btn-success" href="{{ url_for('notes.create') }}">+ Новая заметка</a>
+</div>
+<form class="row g-2 mb-4" method="get">
+  <div class="col">
+    <input class="form-control" type="search" name="q" value="{{ q }}" placeholder="Поиск по заголовку и тексту">
+  </div>
+  <div class="col-auto"><button class="btn btn-outline-primary" type="submit">Найти</button></div>
+  {% if q %}<div class="col-auto"><a class="btn btn-outline-secondary" href="{{ url_for('notes.index') }}">Сбросить</a></div>{% endif %}
+</form>
+
+{% if notes %}
+<div class="row g-3">
+  {% for n in notes %}
+  <div class="col-md-6 col-lg-4">
+    <div class="card h-100 shadow-sm note-card">
+      <div class="card-body">
+        <h2 class="h5 card-title">{{ n['title'] }}</h2>
+        <p class="card-text note-text">{{ n['content'] }}</p>
+      </div>
+      <div class="card-footer d-flex justify-content-between align-items-center">
+        <small class="text-muted">изменено {{ n['updated_at'] }}</small>
+        <div class="d-flex gap-1">
+          <a class="btn btn-sm btn-outline-primary" href="{{ url_for('notes.edit', note_id=n['id']) }}">Изменить</a>
+          <form method="post" action="{{ url_for('notes.delete', note_id=n['id']) }}" class="m-0"
+                onsubmit="return confirm('Удалить заметку?');">
+            <input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+            <button class="btn btn-sm btn-outline-danger" type="submit">Удалить</button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+  {% endfor %}
+</div>
+{% else %}
+<div class="alert alert-secondary">
+  {% if q %}Ничего не найдено по запросу «{{ q }}».{% else %}Заметок пока нет. Нажмите «Новая заметка».{% endif %}
+</div>
+{% endif %}
+{% endblock %}
